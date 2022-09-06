@@ -3,6 +3,12 @@ setup: ## Install dependencies
 	./venv/bin/python -m pip install --upgrade pip
 	./venv/bin/python -m pip install -r requirements.txt
 
+run_sd:
+	conda activate stable-diffusion-main/ldm
+	python activate stable-diffusion-main/scripts/txt2img.py --prompt "a photograph of an astronaut riding a horse" --plms
+	conda deactivate
+
+
 run: ## Run the app with no reload
 	./venv/bin/wave run --no-reload src.app
 

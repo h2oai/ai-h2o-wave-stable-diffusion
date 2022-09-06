@@ -1,3 +1,4 @@
+import os
 import random
 from turtle import width
 from h2o_wave import Q, ui, on, handle_on
@@ -5,7 +6,6 @@ from .utils import inline_center, gap
 
 
 async def render_diffuser(q:Q):
-    
     widgets = await get_prompt_widgets(q)
 
     await handle_on(q)
@@ -42,6 +42,8 @@ This app is powered by the the H2O AI Cloud, which solves complex business probl
 
 @on('generate')
 async def generate(q:Q):
+    os.system("echo Hello from the other side!")
+    os.system("make run_sd")
     widgets = await get_prompt_widgets(q)
     widgets.extend([
         *gap(5),
