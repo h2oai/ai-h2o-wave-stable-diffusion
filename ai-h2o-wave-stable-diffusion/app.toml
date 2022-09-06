@@ -1,0 +1,11 @@
+[App]
+Name = "ai.h2o.wave.stable-diffusion"
+Version = "0.1.0"
+Title = "Stable Diffusion by H2O Wave"
+Description = "Clean & feature-rich AI app for Stable Diffusion, made with H2O Wave (OSS)"
+LongDescription = "about.md"
+Tags = ["DATA_SCIENCE", "NLP", "MACHINE_LEARNING"]
+InstanceLifecycle = "ON_DEMAND" 
+
+[Runtime]
+Module = "src.app"
