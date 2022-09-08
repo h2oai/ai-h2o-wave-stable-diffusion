@@ -1,11 +1,9 @@
 import os
-import random
-from turtle import width
 from h2o_wave import Q, ui, on, handle_on
-from .utils import inline_center, gap
+from .utils import center, gap
+import shutil
 
-
-async def render_diffuser(q:Q):
+async def render_sd_page(q:Q):
     widgets = await get_prompt_widgets(q)
 
     await handle_on(q)
@@ -25,7 +23,7 @@ async def about(q:Q):
         closable=True,
         items=[
             ui.separator(),
-            *inline_center([
+            *center([
                 ui.text("""
 A latent text-to-image diffusion model capable of generating photo-realistic images given any text input.
 
@@ -42,12 +40,10 @@ This app is powered by the the H2O AI Cloud, which solves complex business probl
 
 @on('generate')
 async def generate(q:Q):
-    os.system("echo Hello from the other side!")
-    os.system("make run_sd")
     widgets = await get_prompt_widgets(q)
     widgets.extend([
         *gap(5),
-        *inline_center([
+        *center([
             ui.progress(
                 label='Running Stable Diffusion Model. Making  AI Art.',
                 width='70%'
@@ -57,11 +53,7 @@ async def generate(q:Q):
     q.page['body'] = ui.form_card('body', items=widgets)
     await q.page.save()
 
-    q.client.image='https://wave.h2o.ai/img/logo.svg' \
-        if random.randint(1,2) == 1 else 'https://wave.h2o.ai/img/h2o-logo.svg'
-    
-    await q.sleep(2)
-    await render(q)
+    await run_model(q)
 
 
 @on('width')
@@ -69,7 +61,7 @@ async def render(q:Q):
     width = q.args.width or 300
     q.client.output_widgets = widgets = [
         *gap(5),
-        *inline_center([
+        *center([
             ui.image(
                 title='image2',
                 path=q.client.image,
@@ -77,7 +69,7 @@ async def render(q:Q):
             )
         ]),
         *gap(5),
-        *inline_center([
+        *center([
             ui.slider(
                 name='width',
                 label='Width',
@@ -93,11 +85,8 @@ async def render(q:Q):
 
 
 
-    q.page['body'] = ui.form_card('body', items=widgets)
-
-
 async def get_prompt_widgets(q:Q):
-
+    return []
     return [
     *gap(1),
         ui.inline(justify='end', items=[
@@ -108,7 +97,7 @@ async def get_prompt_widgets(q:Q):
             )
         ]),
         *gap(3),
-        *inline_center([
+        *center([
             ui.textbox(
                 name='prompt',
                 label='',
@@ -125,3 +114,56 @@ async def get_prompt_widgets(q:Q):
             )
         ])
     ]
+
+async def run_model(q:Q):
+    try:
+        print("Starting model run")
+        os.mkdir('output')
+        os.system(" ".join([
+            'cd',
+            'stable-diffusion-main',
+            '&&'
+            'ldm_env2/bin/python',
+            'scripts/txt2img.py',
+            '--skip_grid',
+            '--n_samples',
+            '1',
+            '--prompt',
+            f'"{q.args.prompt}"',
+            '--outdir',
+            '"../output/"'
+        ]))
+
+        file = os.listdir('output/samples')[0]
+        q.client.image = img_path = (await q.site.upload([f'output/samples/{file}']))[0]
+
+        shutil.rmtree('output')
+        print("finished model run")
+
+        width = q.args.width or 300
+
+        q.client.output_widgets = widgets = [
+             *gap(5),
+            *center([
+                ui.image(
+                    title='image2',
+                    path=img_path,
+                    width=f'{width}'
+                )
+            ]),
+            *gap(5),
+            *center([
+                ui.slider(
+                    name='width',
+                    label='Width',
+                    value=width,
+                    min=10,
+                    max=800,
+                    trigger=True,
+                    width='50%',
+                )
+            ])
+       ]
+
+    except Exception as e:
+        print(f"Failed to run the model. {e}")

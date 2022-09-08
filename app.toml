@@ -5,7 +5,7 @@ Title = "Stable Diffusion by H2O Wave"
 Description = "Clean & feature-rich AI app for Stable Diffusion, made with H2O Wave (OSS)"
 LongDescription = "about.md"
 Tags = ["DATA_SCIENCE", "NLP", "MACHINE_LEARNING"]
-MemoryReservation="5Gi"
+MemoryReservation="12Gi"
 InstanceLifecycle = "ON_DEMAND" 
 
 [Runtime]

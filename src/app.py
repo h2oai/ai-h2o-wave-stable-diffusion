@@ -1,7 +1,7 @@
-from h2o_wave import Q, ui, app, main
+from h2o_wave import Q, app, main
 from .initializers import init_client
-from .diffuser import render_diffuser
-from .utils import clear_page, error
+from .handlers import render_page
+from .utils import error
 
 @app('/')
 async def serve(q:Q):
@@ -19,9 +19,3 @@ async def serve(q:Q):
 
     # save the page
     await q.page.save()
-
-
-async def render_page(q:Q):
-    await clear_page(q)
-
-    await render_diffuser(q)
