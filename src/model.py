@@ -1,8 +1,11 @@
-from h2o_wave import Q, ui
-from .samples import render_samples
+from h2o_wave import Q, ui, on
+from .images import render_samples
 from .utils import gap
+from .initializers import render_header
+from .static import styles, artists
 import os
 import shutil
+
 
 async def run_model(q:Q):
     # Check for input
@@ -12,7 +15,7 @@ async def run_model(q:Q):
     await render_progress(q)
 
     # run model
-    await launch_model(q)
+    await model_predict(q)
 
     await render_samples(q)
 
@@ -43,7 +46,7 @@ async def render_progress(q:Q):
     await q.page.save()
 
 
-async def launch_model(q:Q):
+async def model_predict(q:Q):
     if os.path.exists('output2'):
         shutil.rmtree('output2', ignore_errors=False)
     
@@ -73,3 +76,21 @@ async def launch_model(q:Q):
 
 
     print("finished model run")
+
+
+
+@on()
+async def generate(q:Q):
+    await run_model(q)
+
+
+@on()
+async def append(q:Q):
+
+    if q.args.styles:
+        q.client.prompt += ', ' ; q.client.prompt += ", ".join([styles[style] for style in q.args.styles])
+    if q.args.artists:
+        q.client.prompt += ', ' ; q.client.prompt +=  ", ".join([artists[artist] for artist in q.args.artists])
+
+
+    await render_header(q)

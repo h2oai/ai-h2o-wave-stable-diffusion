@@ -1,8 +1,10 @@
-from h2o_wave import Q, ui
+from h2o_wave import Q, ui, on
 from .utils import gap
 from .static import styles, artists
 
-async def render_params(q):
+
+
+async def params_card(q):
     n_iter = q.args.n_iter or 2
     num_samples = q.args.num_samples or 3
     seed = q.args.seed or '1245'
@@ -139,7 +141,7 @@ async def render_params(q):
     ])
 
 
-async def render_keywords(q:Q):
+async def render_tips(q:Q):
     q.page['meta'].side_panel = ui.side_panel(title='', items=[
         
         ui.button(
@@ -168,3 +170,8 @@ async def render_keywords(q:Q):
             icon='Cancel',
         ),
     ])
+
+
+@on()
+async def tips(q:Q):
+    await render_tips(q)
