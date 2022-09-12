@@ -8,7 +8,14 @@ async def render_samples(q:Q):
     if not images:
         images = q.client.images = await get_images(q)
     
-    num = int(q.args.num or 0)
+    num = q.args['#'] or 0
+    num = int(q.args.num or num)
+
+    thumbnails = []
+    for i, img in enumerate(images):
+        if i == num: thumbnails.append(ui.text(f'<img src="{images[i]}" width="70" height="70">'))
+        else: thumbnails.append(ui.text(f'<a href="#{i}"><img src="{images[i]}" width="50" height="50"></a>'))
+
     widgets=[
         # gap
         *gap(5),
@@ -36,7 +43,7 @@ async def render_samples(q:Q):
                 #primary=True,
                 icon='OpenInNewTab',
                 label='Open',
-                path=images[int(q.args.button or 1)-1],
+                path=images[num],
             ),
             *gap(3),
             ui.button(
@@ -47,7 +54,9 @@ async def render_samples(q:Q):
                 primary=True,
                 icon='DoubleChevronRight8'
             )
-        ])
+        ]),
+        *gap(4),
+        *center(thumbnails)
     ]
 
     q.page['image'] = ui.form_card('image', items=widgets)
@@ -56,7 +65,7 @@ async def render_samples(q:Q):
 
 
 async def get_images(q:Q):
-    files = os.listdir('output/samples')
-    filepaths = [f'output/samples/{file}' for file in files]
+    files = os.listdir('output2/samples')
+    filepaths = [f'output2/samples/{file}' for file in files]
     images = await q.site.upload(filepaths)
     return images

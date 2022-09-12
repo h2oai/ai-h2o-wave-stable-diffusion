@@ -1,26 +1,31 @@
 from h2o_wave import Q, ui
+from .images import render_images
+from .utils import center
 
+async def init_client(q):
+    
+    q.client.prompt = 'spaceship, realistic'
 
-async def init_client(q:Q):
     q.page['meta'] = ui.meta_card(box='',
         title='Stable Diffusion | H2O.ai',
+        theme='h2o-dark',
         layouts=[
             ui.layout(breakpoint='xs', zones=[
                 ui.zone(name='main', size='100vh', zones=[
-                    ui.zone(name='header', size='120px'),
+                    ui.zone(name='header', size='100px'),
                     ui.zone(name='body', size='1', zones=[
-                        ui.zone(name='params', size='50%'),
-                        ui.zone(name='image', size='50%'),
+                        ui.zone(name='params', size='30%'),
+                        ui.zone(name='image', size='70%'),
                     ]),
                     ui.zone(name='footer')
                 ])
             ]),
             ui.layout(breakpoint='m', zones=[
                 ui.zone(name='main', size='100vh', zones=[
-                    ui.zone(name='header', size='120px'),
+                    ui.zone(name='header', size='165px'),
                     ui.zone(name='body', size='1', direction='row', zones=[
-                        ui.zone(name='params', size='50%'),
-                        ui.zone(name='image', size='50%'),
+                        ui.zone(name='params', size='30%'),
+                        ui.zone(name='image', size='70%'),
                     ]),
                     ui.zone(name='footer')
                 ])
@@ -28,8 +33,15 @@ async def init_client(q:Q):
         ]
     )
 
+    await render_header(q)
+
+    await render_footer(q)
+
+async def render_header(q:Q):
+
     q.page['header'] = ui.header_card(
-        box='header',
+        box=ui.box('header', height='90px'),
+        color='card',
         title='Stable Diffusion',
         subtitle='Make AI Art, powered by H2O AI Cloud',
         image='https://wave.h2o.ai/img/h2o-logo.svg',
@@ -38,24 +50,46 @@ async def init_client(q:Q):
                 name='prompt',
                 label='',
                 placeholder='I am thinking of...',
-                value=q.args.prompt,
-                width='500px',
-            ),
-            ui.button(
-                name='generate',
-                label='Make',
-                icon='MachineLearning',
+                value=q.client.prompt,
+                width='600px',
             )
         ],
         items=[
-            ui.button(
+            ui.mini_button(
+                name='about',
+                label='About',
+                icon='info'
+            ),
+            ui.mini_button(
                 name='history',
-                label='History', icon='History',
-                primary=True
+                label='History',
+                icon='History',
             )
         ]
     )
 
+    q.page['header2'] = ui.form_card(
+        box=ui.box('header', height='65px'),
+        items=[
+            ui.buttons(justify='center', items=[
+                ui.button(
+                name='generate',
+                label='Make AI Art',
+                icon='MachineLearning',
+                primary=True
+            ),
+            ui.button(
+                name='tips',
+                label='Prompt Tips',
+                icon='Lightbulb',
+            )
+            ])
+
+        ]
+    )
+
+
+async def render_footer(q:Q):
     q.page['footer'] = ui.footer_card('footer',
         caption='',
         items=[
@@ -77,3 +111,7 @@ async def init_client(q:Q):
                 ])
             ])
         ])
+
+    await render_images(q)
+
+

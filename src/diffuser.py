@@ -16,27 +16,6 @@ async def render_sd_page(q:Q):
     q.page['body'] = ui.form_card('body', items=widgets)
 
 
-@on()
-async def about(q:Q):
-    q.page['meta'].dialog = ui.dialog(
-        title='About Stable Diffusion by H2O Wave',
-        closable=True,
-        items=[
-            ui.separator(),
-            *center([
-                ui.text("""
-A latent text-to-image diffusion model capable of generating photo-realistic images given any text input.
-
-This AI web app is made with H2O Wave, an open-source Python development framework for fast and easy development of real-time interactive AI apps with sophisticated visualizations.
-
-With this app, you can get creative and create stunning AI art within in real-time.
-
-This app is powered by the the H2O AI Cloud, which solves complex business problems and accelerates the discovery of new ideas with results you can understand and trust.
-                """)
-            ])
-        ]
-    )
-
 
 @on('generate')
 async def generate(q:Q):

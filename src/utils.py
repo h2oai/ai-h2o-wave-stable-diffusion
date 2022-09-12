@@ -22,3 +22,4 @@ def center(items, gap_size:int=0):
 async def clear_page(q:Q):
     q.page['meta'].dialog = None
     q.page['meta'].notification_bar = None
+    q.page['meta'].side_panel = None
