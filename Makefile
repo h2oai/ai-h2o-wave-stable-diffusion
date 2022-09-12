@@ -10,7 +10,7 @@ run_sd:
 
 
 run: ## Run the app with no reload
-	./venv/bin/wave run --no-reload src.app
+	H2O_WAVE_NO_LOG=True ./venv/bin/wave run --no-reload src.app_run.py
 
 dev: ## Run the app with active reload
 	H2O_WAVE_NO_LOG=True ./venv/bin/wave run src.app
