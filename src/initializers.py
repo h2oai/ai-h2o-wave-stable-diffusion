@@ -23,10 +23,11 @@ async def init_client(q):
             ui.layout(breakpoint='m', zones=[
                 ui.zone(name='main', size='100vh', zones=[
                     ui.zone(name='header', size='165px'),
-                    ui.zone(name='body', size='1', direction='row', zones=[
-                        ui.zone(name='params', size='30%'),
-                        ui.zone(name='image', size='70%'),
-                    ]),
+                    # ui.zone(name='body', size='1', direction='row', zones=[
+                    #     ui.zone(name='params', size='30%'),
+                    #     ui.zone(name='image', size='70%'),
+                    # ]),
+                    ui.zone(name='image', size='1'),
                     ui.zone(name='footer')
                 ])
             ])

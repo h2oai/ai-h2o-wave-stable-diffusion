@@ -70,7 +70,7 @@ async def tips(q:Q):
 @on()
 async def append(q:Q):
     
-    if q.args.style:
+    if q.args.styles:
         q.client.prompt += ', ' ; q.client.prompt += ", ".join([styles[style] for style in q.args.styles])
     if q.args.artists:
         q.client.prompt += ', ' ; q.client.prompt +=  ", ".join([artists[artist] for artist in q.args.artists])

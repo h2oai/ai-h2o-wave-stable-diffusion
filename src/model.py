@@ -48,7 +48,7 @@ async def launch_model(q:Q):
         shutil.rmtree('output2', ignore_errors=False)
     
     q.client.images = None
-    q.client.prompt = None
+    q.client.prompt = ""
     os.mkdir('output2')
 
     os.system(" ".join([
